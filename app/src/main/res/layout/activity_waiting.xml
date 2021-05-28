@@ -3,33 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
-    android:background="@color/base_red"
     android:orientation="vertical"
-    android:layout_gravity="center_horizontal|center_vertical"
+    android:padding="16dp"
+    android:layout_gravity="center_vertical|center_horizontal"
     android:gravity="center"
-    >
+    tools:context=".WaitingActivity">
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/waiting_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/lungs"
+        android:src="@drawable/waiting"
         />
 
     <TextView
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cov_x"
-        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
         android:fontFamily="@font/lato_regular"
-        android:textSize="32sp"
-        android:textColor="@color/base_white"/>
-
-
-
-
-
-
+        android:textSize="20sp"
+        android:text="@string/menunggu_hasil_prediksi"
+        />
 
 </LinearLayout>

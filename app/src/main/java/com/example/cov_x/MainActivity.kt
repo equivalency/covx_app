@@ -1,7 +1,8 @@
 package com.example.cov_x
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cov_x.fragments.HomeFragment
 import com.example.cov_x.fragments.RiwayatFragment
@@ -18,12 +19,17 @@ class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val riwayatFragment = RiwayatFragment()
 
-//        Still buggy
-        if (savedInstanceState == null){
+        bottomNav = findViewById(R.id.bottom_navbar)
+
+        val isSuccessState = intent.getBooleanExtra("successState", false)
+        if (isSuccessState){
+            bottomNav.setItemSelected(R.id.nav_riwayat, true)
+            makeCurrentFragment(riwayatFragment)
+        }
+        else {
+            bottomNav.setItemSelected(R.id.nav_home, true)
             makeCurrentFragment(homeFragment)
         }
-
-        bottomNav = findViewById(R.id.bottom_navbar)
 
         bottomNav.setOnItemSelectedListener {
             when (it){

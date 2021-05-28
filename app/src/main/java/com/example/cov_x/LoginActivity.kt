@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
            if(!isEmptyField){
                val homeIntent = Intent(this@LoginActivity, MainActivity::class.java)
                startActivity(homeIntent)
+               finish()
 
                Toast.makeText(this, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
            }
