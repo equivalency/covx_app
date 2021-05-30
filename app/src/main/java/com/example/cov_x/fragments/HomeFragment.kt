@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.example.cov_x.PreviewFotoActivity
 import com.example.cov_x.PreviewListFotoActivity
 import com.example.cov_x.R
 import com.gun0912.tedpermission.PermissionListener
@@ -123,21 +124,19 @@ class HomeFragment() : Fragment(), View.OnClickListener {
                 }
                 else{
                     val imageUri = data?.data
-                    imageUri?.let { listFotoUri.add(it) }
 
-                    val previewListFotoIntent = Intent(
+                    val previewFotoIntent = Intent(
                         activity,
-                        PreviewListFotoActivity::class.java
+                        PreviewFotoActivity::class.java
                     )
-                    previewListFotoIntent.putExtra("listFotoUri", listFotoUri)
-                    startActivity(previewListFotoIntent)
+                    previewFotoIntent.putExtra("FotoUri", imageUri.toString())
+                    startActivity(previewFotoIntent)
 
                 }
             }
         }
         else if (requestCode == CAMERA_ACCESS){
             if (resultCode == Activity.RESULT_OK){
-                val listFotoUri: ArrayList<Uri> = arrayListOf()
                 val file = File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg")
                 val uri = thiscontext?.let {
                     FileProvider.getUriForFile(
@@ -146,13 +145,13 @@ class HomeFragment() : Fragment(), View.OnClickListener {
                         file
                     )
                 }
-                uri?.let { listFotoUri.add(it) }
-                val previewListFotoIntent = Intent(
+
+                val previewFotoIntent = Intent(
                     activity,
-                    PreviewListFotoActivity::class.java
+                    PreviewFotoActivity::class.java
                 )
-                previewListFotoIntent.putExtra("listFotoUri", listFotoUri)
-                startActivity(previewListFotoIntent)
+                previewFotoIntent.putExtra("FotoUri", uri.toString())
+                startActivity(previewFotoIntent)
             }
         }
     }

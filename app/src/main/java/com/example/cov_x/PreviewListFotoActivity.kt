@@ -31,17 +31,10 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
 
         rvFoto.setHasFixedSize(true)
 
-        val listUri = intent.getSerializableExtra("listFotoUri") as ArrayList<Uri?>?
-        val listFotoImage: ArrayList<Bitmap> = arrayListOf()
+        val listUri = intent.getSerializableExtra("listFotoUri") as ArrayList<Uri>
 
-        if (listUri != null) {
-            for (i in listUri){
-                val bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), i)
-                listFotoImage.add(bitmap)
-            }
-        }
 
-        val fotoAdapter = FotoAdapter(listFotoImage)
+        val fotoAdapter = FotoAdapter(listUri)
         rvFoto.apply {
             layoutManager = GridLayoutManager(this@PreviewListFotoActivity, 2)
             adapter = fotoAdapter
@@ -52,12 +45,12 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v?.id == R.id.btn_KirimFoto){
 //            SEND FOTO LOGIC HERE ZULFA
-//            val waitingIntent = Intent(this@PreviewListFotoActivity, WaitingActivity::class.java)
-//            startActivity(waitingIntent)
-//            finish()
-            val successIntent = Intent(this@PreviewListFotoActivity, SuccessActivity::class.java)
-            startActivity(successIntent)
+            val waitingIntent = Intent(this@PreviewListFotoActivity, WaitingActivity::class.java)
+            startActivity(waitingIntent)
             finish()
+//            val successIntent = Intent(this@PreviewListFotoActivity, SuccessActivity::class.java)
+//            startActivity(successIntent)
+//            finish()
         }
     }
 

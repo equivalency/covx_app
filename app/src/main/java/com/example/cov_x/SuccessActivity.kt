@@ -5,9 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import androidx.fragment.app.Fragment
-import com.example.cov_x.fragments.HomeFragment
-import com.example.cov_x.fragments.RiwayatFragment
 
 class SuccessActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnLihatHasil: Button
@@ -18,7 +15,6 @@ class SuccessActivity : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.hide()
         
         btnLihatHasil = findViewById(R.id.btnLihatHasil)
-
         btnLihatHasil.setOnClickListener(this)
     }
 

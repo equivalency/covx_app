@@ -5,13 +5,13 @@ import com.example.cov_x.adapters.FotoAdapter.FotoViewHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import com.example.cov_x.R
-import android.graphics.Bitmap
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class FotoAdapter(val listFotoImage: ArrayList<Bitmap>) : RecyclerView.Adapter<FotoViewHolder>() {
+class FotoAdapter(val listFotoImage: ArrayList<Uri>) : RecyclerView.Adapter<FotoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FotoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_foto, parent, false)
