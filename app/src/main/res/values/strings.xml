@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cov-X</string>
+    <string name="app_name">COV-X</string>
     <string name="cov_x">COV-X</string>
     <string name="daftar">Daftar</string>
     <string name="nama">Nama</string>
@@ -26,4 +26,12 @@
     <string name="lihat_hasil_prediksi">Lihat Hasil Prediksi</string>
     <string name="prediksi_berhasil">Prediksi Berhasil</string>
     <string name="maks_5_foto">(Maks. 5 foto)</string>
+    <string name="loading">Loading...</string>
+    <string name="profil">Profil</string>
+    <string name="riwayat">Riwayat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dwi_gmail_com">dwi@gmail.com</string>
+    <string name="dwi_prasetya_armunanta">Dwi Prasetya Armunanta</string>
+    <string name="keluar">Keluar</string>
 </resources>

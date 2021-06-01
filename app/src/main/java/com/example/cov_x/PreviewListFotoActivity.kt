@@ -45,12 +45,12 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v?.id == R.id.btn_KirimFoto){
 //            SEND FOTO LOGIC HERE ZULFA
-            val waitingIntent = Intent(this@PreviewListFotoActivity, WaitingActivity::class.java)
-            startActivity(waitingIntent)
-            finish()
-//            val successIntent = Intent(this@PreviewListFotoActivity, SuccessActivity::class.java)
-//            startActivity(successIntent)
+//            val waitingIntent = Intent(this@PreviewListFotoActivity, WaitingActivity::class.java)
+//            startActivity(waitingIntent)
 //            finish()
+            val successIntent = Intent(this@PreviewListFotoActivity, SuccessActivity::class.java)
+            startActivity(successIntent)
+            finish()
         }
     }
 

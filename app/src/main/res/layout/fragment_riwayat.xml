@@ -11,6 +11,14 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/item_row_foto"/>
 
+    <ProgressBar
+        android:id="@+id/ProgressBar01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/progress_bar"
+        android:layout_gravity="center"
+        />
+
     <LinearLayout
         android:id="@+id/empty_layout"
         android:layout_width="wrap_content"

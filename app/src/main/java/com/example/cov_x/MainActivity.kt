@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cov_x.fragments.HomeFragment
+import com.example.cov_x.fragments.ProfilFragment
 import com.example.cov_x.fragments.RiwayatFragment
 import com.ismaeldivita.chipnavigation.ChipNavigationBar
 
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         val homeFragment = HomeFragment()
         val riwayatFragment = RiwayatFragment()
+        val profilFragment = ProfilFragment()
 
         bottomNav = findViewById(R.id.bottom_navbar)
 
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
             when (it){
                 R.id.nav_home -> makeCurrentFragment(homeFragment)
                 R.id.nav_riwayat -> makeCurrentFragment(riwayatFragment)
+                R.id.nav_profil -> makeCurrentFragment(profilFragment)
+
             }
         }
 

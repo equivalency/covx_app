@@ -1,9 +1,12 @@
 package com.example.cov_x
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -36,6 +39,14 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun closeKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
     override fun onClick(v: View?) {
         if (v?.id == R.id.txtLogin){
             val loginIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
@@ -63,10 +74,19 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             if(!isEmptyField){
-                val homeIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                startActivity(homeIntent)
+                closeKeyboard()
 
-                Toast.makeText(this, "Berhasil Daftar", Toast.LENGTH_SHORT).show()
+//                Loading bar
+                val builder = AlertDialog.Builder(this)
+                val inflater = LayoutInflater.from(this)
+                builder.setView(inflater.inflate(R.layout.custom_loading, null))
+                builder.setCancelable(false)
+                builder.create().show()
+
+//                val homeIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
+//                startActivity(homeIntent)
+//
+//                Toast.makeText(this, "Berhasil Daftar", Toast.LENGTH_SHORT).show()
             }
         }
     }

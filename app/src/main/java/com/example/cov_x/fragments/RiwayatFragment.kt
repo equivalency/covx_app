@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cov_x.R
 
@@ -26,16 +27,22 @@ class RiwayatFragment : Fragment(){
 
         val recycleView: RecyclerView = view.findViewById(R.id.rv_Foto)
         val emptyLayout: LinearLayout = view.findViewById(R.id.empty_layout)
+        val spinLoader: ProgressBar = view.findViewById(R.id.ProgressBar01)
 
+//        First state
+        emptyLayout.setVisibility(View.GONE)
+        recycleView.setVisibility(View.GONE)
 //        State if no data
         var noData: Boolean = true
 
-//        Implement Adapter Here Zulfa hehehe
+//        Implement RecyclerView Here Zulfa hehehe
 
-        if (noData) {
-            recycleView.setVisibility(View.GONE)
-            emptyLayout.setVisibility(LinearLayout.VISIBLE)
-        }
+//        if (noData) {
+//            spinLoader.setVisibility(View.GONE)
+//            recycleView.setVisibility(View.GONE)
+//            emptyLayout.setVisibility(LinearLayout.VISIBLE)
+//        }
+
 
     }
 
