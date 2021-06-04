@@ -81,7 +81,7 @@ class HomeFragment() : Fragment(), View.OnClickListener {
 
     private fun intentCamera(){
         val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val file = File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg")
+        val file = File(thiscontext?.getExternalFilesDir(null), "MyPhoto.jpg")
         val uri = thiscontext?.let {
             FileProvider.getUriForFile(
                 it,
@@ -137,7 +137,7 @@ class HomeFragment() : Fragment(), View.OnClickListener {
         }
         else if (requestCode == CAMERA_ACCESS){
             if (resultCode == Activity.RESULT_OK){
-                val file = File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg")
+                val file = File(thiscontext?.getExternalFilesDir(null), "MyPhoto.jpg")
                 val uri = thiscontext?.let {
                     FileProvider.getUriForFile(
                         it,

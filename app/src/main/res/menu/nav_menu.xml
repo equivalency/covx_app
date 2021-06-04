@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_round_home_24"
         android:title="@string/home"
         android:enabled="true"
         app:cnb_iconColor="@color/base_red"
@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/nav_riwayat"
-        android:icon="@drawable/ic_history"
+        android:icon="@drawable/ic_baseline_history_24"
         android:title="@string/riwayat"
         app:cnb_iconColor="@color/base_red"
         app:cnb_textColor="@color/base_red"
@@ -21,7 +21,7 @@
 
     <item
         android:id="@+id/nav_profil"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_baseline_person_24"
         android:title="@string/profil"
         app:cnb_iconColor="@color/base_red"
         app:cnb_textColor="@color/base_red"

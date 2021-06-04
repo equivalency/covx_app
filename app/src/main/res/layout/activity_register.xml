@@ -109,7 +109,7 @@
             android:textSize="16sp"
             android:fontFamily="@font/lato_regular"
             android:textColor="@color/base_red"
-            android:text="@string/login"/>
+            android:text="@string/masuk"/>
 
     </LinearLayout>
 
