@@ -62,11 +62,9 @@ class HomeFragment() : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.topLayout){
-            requestGaleryPermission()
-        }
-        else if(v?.id == R.id.botLayout){
-            requestCameraPermission()
+        when(v?.id){
+            R.id.topLayout -> requestGaleryPermission()
+            R.id.botLayout -> requestCameraPermission()
         }
     }
 

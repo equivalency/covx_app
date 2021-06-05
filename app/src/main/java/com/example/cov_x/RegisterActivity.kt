@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,8 +12,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.cov_x.models.RegisterRequest
+import com.example.cov_x.models.RegisterResponse
+import retrofit2.Callback
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
+
+    companion object {
+        private val BASE_URL = "http://35.192.163.245/"
+        private val TAG = RegisterActivity::class.java.simpleName
+    }
 
     private lateinit var editNama: EditText
     private lateinit var editEmail: EditText
@@ -55,8 +67,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
         else if (v?.id == R.id.btnDaftar){
             val nama = editNama.text.toString()
-            val email = editEmail.text.toString().trim()
-            val password = editPassword.text.toString().trim()
+            val email = editEmail.text.toString()
+            val password = editPassword.text.toString()
 
             var isEmptyField = false
 
@@ -76,12 +88,45 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
             if(!isEmptyField){
                 closeKeyboard()
 
-//                Loading bar
                 val builder = AlertDialog.Builder(this)
                 val inflater = LayoutInflater.from(this)
                 builder.setView(inflater.inflate(R.layout.custom_loading, null))
                 builder.setCancelable(false)
                 builder.create().show()
+
+                val registerData = RegisterRequest()
+                registerData.name = nama
+                registerData.email = email
+                registerData.password = password
+
+                val request = ApiClient.buildService(UserService::class.java)
+                val call = request.registerUser(registerData)
+                
+                call.enqueue(object: Callback<RegisterResponse>{
+                    override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>){
+                        if (response.isSuccessful){
+                            builder.create().dismiss()
+                            Toast.makeText(this@RegisterActivity, response.body()?.message, Toast.LENGTH_SHORT).show()
+                            val loginIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                            startActivity(loginIntent)
+                        }
+                        else{
+                            Toast.makeText(this@RegisterActivity, "Terjadi kesalahan sistem", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                        builder.create().dismiss()
+                        Toast.makeText(this@RegisterActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+//                Loading bar
+//                val builder = AlertDialog.Builder(this)
+//                val inflater = LayoutInflater.from(this)
+//                builder.setView(inflater.inflate(R.layout.custom_loading, null))
+//                builder.setCancelable(false)
+//                builder.create().show()
 
 //                val homeIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
 //                startActivity(homeIntent)
