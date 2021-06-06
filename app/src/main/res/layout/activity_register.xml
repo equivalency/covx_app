@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="50dp"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
@@ -22,56 +23,66 @@
         android:textColor="@color/base_red"
         android:layout_marginTop="60dp"/>
 
-    <EditText
-        android:id="@+id/editNama"
-        android:inputType="text"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/nama"
         android:layout_marginTop="30dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="15dp"
-        android:background="@drawable/custom_edit_text"
+        android:hint="@string/nama"
         android:textSize="16sp"
         android:fontFamily="@font/lato_regular"
         android:textColor="@color/base_red"
         android:textColorHint="@color/base_red"
-        />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editNama"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:inputType="textEmailAddress"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:hint="@string/email"
-        android:layout_marginTop="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="15dp"
-        android:background="@drawable/custom_edit_text"
         android:textSize="16sp"
         android:fontFamily="@font/lato_regular"
         android:textColor="@color/base_red"
         android:textColorHint="@color/base_red"
-        />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editEmail"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editPassword"
-        android:inputType="textPassword"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
         android:layout_marginTop="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="15dp"
-        android:background="@drawable/custom_edit_text"
+        android:hint="@string/password"
         android:textSize="16sp"
         android:fontFamily="@font/lato_regular"
         android:textColor="@color/base_red"
         android:textColorHint="@color/base_red"
-        />
+        app:passwordToggleEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPassword"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
     <android.widget.Button
         android:id="@+id/btnDaftar"
