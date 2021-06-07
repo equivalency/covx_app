@@ -18,6 +18,8 @@ class SuccessActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_success)
 
+        supportActionBar?.title = "Laman Sukses"
+
         btnLihatHasil = findViewById(R.id.btnLihatHasil)
 
         btnLihatHasil.setOnClickListener(this)

@@ -2,10 +2,11 @@ package com.example.cov_x.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.io.File
 
 @Parcelize
 data class FotoDataRequest(
-        var files: ArrayList<ByteArray> = arrayListOf(),
+        var files: File
 ): Parcelable
 
 data class FotoDataResponse(

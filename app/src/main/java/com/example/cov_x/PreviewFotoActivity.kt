@@ -2,44 +2,41 @@ package com.example.cov_x
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.cov_x.models.FotoDataRequest
-import com.example.cov_x.models.FotoDataResponse
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
+import java.io.File
 
 
 class PreviewFotoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnKirim: Button
     private lateinit var imgFoto: ImageView
     private lateinit var textNama: TextView
-    private val listFoto = FotoDataRequest()
     private val loadingDialog = LoadingDialog(this)
+    private lateinit var filePath: String
 
     companion object {
         const val FOTO_URI = "foto_uri"
         const val NAMA_FOTO = "nama_foto"
+        const val FOTO_PATH = "foto_path"
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview_foto)
@@ -51,11 +48,9 @@ class PreviewFotoActivity : AppCompatActivity(), View.OnClickListener {
 
         val stringUri = intent.getStringExtra(FOTO_URI)
         val namaFoto = intent.getStringExtra(NAMA_FOTO)
+        filePath = intent.getStringExtra(FOTO_PATH).toString()
 
         val fotoUri = Uri.parse(stringUri)
-        val byteArray = convertImageToByte(fotoUri)
-
-        byteArray?.let { listFoto.files.add(it) }
 
         textNama.text = namaFoto
         Glide.with(this)
@@ -68,35 +63,35 @@ class PreviewFotoActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun convertImageToByte(uri: Uri?): ByteArray? {
-        var data: ByteArray? = null
-        try {
-            val cr = baseContext.contentResolver
-            val inputStream = cr.openInputStream(uri!!)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            data = baos.toByteArray()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        return data
-    }
-
     private fun sendData(){
 
         val pref = this.getSharedPreferences(LoginActivity.PREF_NAME, Context.MODE_PRIVATE)
         val request = ApiClient.buildService(UserService::class.java)
         val token = pref.getString(LoginActivity.KEY_TOKEN, "")
         val stringAuth = "Bearer " + token
-        val call = request.uploadFoto(stringAuth, listFoto)
 
-        call.enqueue(object: Callback<FotoDataResponse> {
-            override fun onResponse(call: Call<FotoDataResponse>, response: Response<FotoDataResponse>){
+        val file = File(filePath)
+        val builder = MultipartBody.Builder()
+        builder.setType(MultipartBody.FORM)
+        val type = "multipart/form-data"
+        builder.addFormDataPart(
+            "files[]",
+            file.getName(),
+            file.asRequestBody(type.toMediaTypeOrNull())
+        )
+        val requestBody = builder.build()
+        Log.d("REQUEST_BODY", requestBody.toString())
+        val call = request.uploadImage(stringAuth, requestBody)
+        call.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
                 if (response.isSuccessful){
                     loadingDialog.dismissDialog()
-                    Toast.makeText(this@PreviewFotoActivity, response.body()?.message, Toast.LENGTH_SHORT).show()
-
+//                           Save Token
+                    Toast.makeText(
+                        this@PreviewFotoActivity,
+                        "Success " + response.message(),
+                        Toast.LENGTH_LONG
+                    ).show()
                     val successIntent = Intent(this@PreviewFotoActivity, SuccessActivity::class.java)
                     startActivity(successIntent)
                     finish()
@@ -107,11 +102,10 @@ class PreviewFotoActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
 
-            override fun onFailure(call: Call<FotoDataResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
                 loadingDialog.dismissDialog()
                 Toast.makeText(this@PreviewFotoActivity, "Terjadi kesalahan sistem: ${t.message}\nSilakan Coba Lagi", Toast.LENGTH_LONG).show()
             }
-
         })
     }
 

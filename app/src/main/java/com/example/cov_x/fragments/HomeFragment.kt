@@ -42,8 +42,8 @@ class HomeFragment() : Fragment(), View.OnClickListener {
     private lateinit var cameraFotoFileName: String
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         thiscontext = container?.context
@@ -84,24 +84,32 @@ class HomeFragment() : Fragment(), View.OnClickListener {
         val file = File(thiscontext?.getExternalFilesDir(null), cameraFotoFileName)
         val uri = thiscontext?.let {
             FileProvider.getUriForFile(
-                    it,
-                    it.getPackageName().toString() + ".provider",
-                    file
+                it,
+                it.getPackageName().toString() + ".provider",
+                file
             )
         }
         m_intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         startActivityForResult(m_intent, CAMERA_ACCESS)
     }
 
-    private fun getDataColumn(context: Context, uri: Uri?, selection: String?,
-                              selectionArgs: Array<String>?): String? {
+    private fun getDataColumn(
+        context: Context, uri: Uri?, selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
 
         var cursor: Cursor? = null
         val column = "_data"
         val projection = arrayOf(column)
 
         try {
-            cursor = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
+            cursor = context.contentResolver.query(
+                uri!!,
+                projection,
+                selection,
+                selectionArgs,
+                null
+            )
             if (cursor != null && cursor.moveToFirst()) {
                 val index = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(index)
@@ -112,7 +120,10 @@ class HomeFragment() : Fragment(), View.OnClickListener {
         return null
     }
 
-
+    private fun getImagePath(uri: Uri): String{
+        val path: String? = thiscontext?.let { RealPathUtil.getRealPath(it, uri) }
+        return path.toString()
+    }
 
 
     private fun getFileName(uri: Uri): String{
@@ -134,43 +145,58 @@ class HomeFragment() : Fragment(), View.OnClickListener {
             if (resultCode == Activity.RESULT_OK){
                 val listFotoUri: ArrayList<Uri> = arrayListOf()
                 val listFileName: ArrayList<String> = arrayListOf()
+                val filePaths: ArrayList<String> = ArrayList()
                 if (data?.clipData != null){
                     val jumlahGambar = data.clipData!!.itemCount
 
                     if (jumlahGambar > 5){
                         Toast.makeText(
-                                thiscontext,
-                                "Maksimum 5 foto yang dipilih",
-                                Toast.LENGTH_SHORT
+                            thiscontext,
+                            "Maksimum 5 foto yang dipilih",
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                     else {
                         for (i in 0 until jumlahGambar){
                             val imageUri = data.clipData!!.getItemAt(i).uri
                             val fileName = getFileName(imageUri)
+                            val fotoPath = imageUri?.let { getImagePath(it) }
 
                             listFotoUri.add(imageUri)
                             listFileName.add(fileName)
+                            filePaths.add(fotoPath.toString())
                         }
                         val previewListFotoIntent = Intent(
-                                activity,
-                                PreviewListFotoActivity::class.java
+                            activity,
+                            PreviewListFotoActivity::class.java
                         )
-                        previewListFotoIntent.putExtra(PreviewListFotoActivity.LIST_FOTO_URI, listFotoUri)
-                        previewListFotoIntent.putExtra(PreviewListFotoActivity.LIST_NAMA_FOTO, listFileName)
+                        previewListFotoIntent.putExtra(
+                            PreviewListFotoActivity.LIST_FOTO_URI,
+                            listFotoUri
+                        )
+                        previewListFotoIntent.putExtra(
+                            PreviewListFotoActivity.LIST_NAMA_FOTO,
+                            listFileName
+                        )
+                        previewListFotoIntent.putExtra(
+                            PreviewListFotoActivity.LIST_FILE_PATH,
+                            filePaths
+                        )
                         startActivity(previewListFotoIntent)
                     }
                 }
                 else{
                     val imageUri = data?.data
                     val fileName = imageUri?.let { getFileName(it) }
+                    val fotoPath = imageUri?.let { getImagePath(it) }
 
                     val previewFotoIntent = Intent(
-                            activity,
-                            PreviewFotoActivity::class.java
+                        activity,
+                        PreviewFotoActivity::class.java
                     )
                     previewFotoIntent.putExtra(PreviewFotoActivity.FOTO_URI, imageUri.toString())
                     previewFotoIntent.putExtra(PreviewFotoActivity.NAMA_FOTO, fileName)
+                    previewFotoIntent.putExtra(PreviewFotoActivity.FOTO_PATH, fotoPath)
                     startActivity(previewFotoIntent)
 
                 }
@@ -181,15 +207,15 @@ class HomeFragment() : Fragment(), View.OnClickListener {
                 val file = File(thiscontext?.getExternalFilesDir(null), cameraFotoFileName)
                 val uri = thiscontext?.let {
                     FileProvider.getUriForFile(
-                            it,
-                            it.getPackageName().toString() + ".provider",
-                            file
+                        it,
+                        it.getPackageName().toString() + ".provider",
+                        file
                     )
                 }
                 val fileName = uri?.let { getCameraFileName(it) }
                 val previewFotoIntent = Intent(
-                        activity,
-                        PreviewFotoActivity::class.java
+                    activity,
+                    PreviewFotoActivity::class.java
                 )
                 previewFotoIntent.putExtra(PreviewFotoActivity.FOTO_URI, uri.toString())
                 previewFotoIntent.putExtra(PreviewFotoActivity.NAMA_FOTO, fileName)
@@ -207,9 +233,9 @@ class HomeFragment() : Fragment(), View.OnClickListener {
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 Toast.makeText(
-                        thiscontext,
-                        "Permission Denied\n$deniedPermissions",
-                        Toast.LENGTH_SHORT
+                    thiscontext,
+                    "Permission Denied\n$deniedPermissions",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -218,8 +244,8 @@ class HomeFragment() : Fragment(), View.OnClickListener {
             .setPermissionListener(permissionlistener)
             .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
             .setPermissions(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
             )
             .check();
     }
@@ -233,9 +259,9 @@ class HomeFragment() : Fragment(), View.OnClickListener {
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 Toast.makeText(
-                        thiscontext,
-                        "Permission Denied\n$deniedPermissions",
-                        Toast.LENGTH_SHORT
+                    thiscontext,
+                    "Permission Denied\n$deniedPermissions",
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -244,7 +270,7 @@ class HomeFragment() : Fragment(), View.OnClickListener {
             .setPermissionListener(permissionlistener)
             .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
             .setPermissions(
-                    Manifest.permission.CAMERA
+                Manifest.permission.CAMERA
             )
             .check();
     }

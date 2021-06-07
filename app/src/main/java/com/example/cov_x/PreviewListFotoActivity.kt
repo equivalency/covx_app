@@ -2,39 +2,36 @@ package com.example.cov_x
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cov_x.adapters.FotoAdapter
-import com.example.cov_x.models.FotoDataRequest
-import com.example.cov_x.models.FotoDataResponse
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
+import java.io.File
 
 
 class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var rvFoto: RecyclerView
     private lateinit var btnKirimFoto: Button
-    private val listFoto = FotoDataRequest()
     private val loadingDialog = LoadingDialog(this)
+    private var filePaths: ArrayList<String> = ArrayList()
 
     companion object {
         const val LIST_FOTO_URI = "list_foto_uri"
         const val LIST_NAMA_FOTO = "list_nama_foto"
+        const val LIST_FILE_PATH = "list_file_path"
     }
 
 
@@ -53,6 +50,7 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
 
         val listUri = intent.getSerializableExtra(LIST_FOTO_URI) as ArrayList<Uri>
         val listNamaFoto = intent.getStringArrayListExtra(LIST_NAMA_FOTO) as ArrayList<String>
+        filePaths = intent.getStringArrayListExtra(LIST_FILE_PATH) as ArrayList<String>
 
 
         val fotoAdapter = FotoAdapter(listUri, listNamaFoto)
@@ -61,29 +59,11 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
             adapter = fotoAdapter
         }
 
-        for (counter in 0 until listUri.size) {
-            val imageUri = listUri.get(counter)
-            val byteArray = convertImageToByte(imageUri)
-            byteArray?.let { listFoto.files.add(it) }
-        }
+
 
 
     }
 
-    private fun convertImageToByte(uri: Uri?): ByteArray? {
-        var data: ByteArray? = null
-        try {
-            val cr = baseContext.contentResolver
-            val inputStream = cr.openInputStream(uri!!)
-            val bitmap = BitmapFactory.decodeStream(inputStream)
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            data = baos.toByteArray()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        return data
-    }
 
     private fun sendData(){
 
@@ -91,29 +71,56 @@ class PreviewListFotoActivity : AppCompatActivity(), View.OnClickListener {
         val request = ApiClient.buildService(UserService::class.java)
         val token = pref.getString(LoginActivity.KEY_TOKEN, "")
         val stringAuth = "Bearer " + token
-        val call = request.uploadFoto(stringAuth, listFoto)
 
-        call.enqueue(object: Callback<FotoDataResponse> {
-            override fun onResponse(call: Call<FotoDataResponse>, response: Response<FotoDataResponse>){
-                if (response.isSuccessful){
+        val builder = MultipartBody.Builder()
+        builder.setType(MultipartBody.FORM)
+        val type = "multipart/form-data"
+        for (i in filePaths.indices) {
+            val file = File(filePaths[i])
+            builder.addFormDataPart(
+                "files[]",
+                file.getName(),
+                file.asRequestBody(type.toMediaTypeOrNull())
+            )
+        }
+
+        val requestBody = builder.build()
+        Log.d("REQUEST_BODY", requestBody.toString())
+        val call = request.uploadImage(stringAuth, requestBody)
+        call.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                if (response.isSuccessful) {
                     loadingDialog.dismissDialog()
-                    Toast.makeText(this@PreviewListFotoActivity, response.body()?.message, Toast.LENGTH_SHORT).show()
-
-                    val successIntent = Intent(this@PreviewListFotoActivity, SuccessActivity::class.java)
+//                           Save Token
+                    Toast.makeText(
+                        this@PreviewListFotoActivity,
+                        "Success " + response.message(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    val successIntent = Intent(
+                        this@PreviewListFotoActivity,
+                        SuccessActivity::class.java
+                    )
                     startActivity(successIntent)
                     finish()
-                }
-                else{
+                } else {
                     loadingDialog.dismissDialog()
-                    Toast.makeText(this@PreviewListFotoActivity, "Terjadi kesalahan sistem\n Silakan Coba Lagi", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@PreviewListFotoActivity,
+                        "Terjadi kesalahan sistem\n Silakan Coba Lagi",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
-            override fun onFailure(call: Call<FotoDataResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
                 loadingDialog.dismissDialog()
-                Toast.makeText(this@PreviewListFotoActivity, "Terjadi kesalahan sistem: ${t.message}\nSilakan Coba Lagi", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@PreviewListFotoActivity,
+                    "Terjadi kesalahan sistem: ${t.message}\nSilakan Coba Lagi",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-
         })
     }
 
