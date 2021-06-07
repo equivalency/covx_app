@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FotoDataRequest(
-        var files: ArrayList<String> = arrayListOf(),
+        var files: ArrayList<ByteArray> = arrayListOf(),
 ): Parcelable
 
 data class FotoDataResponse(

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav = findViewById(R.id.bottom_navbar)
 
-        val isSuccessState = intent.getBooleanExtra(StateActivity.SUCCESS_STATE, false)
+        val isSuccessState = intent.getBooleanExtra(SuccessActivity.SUCCESS_STATE, false)
         if (isSuccessState){
             bottomNav.setItemSelected(R.id.nav_riwayat, true)
             makeCurrentFragment(riwayatFragment)
