@@ -6,11 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".DetailPrediksiActivity">
 
+
+
     <ImageView
         android:id="@+id/imageParu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:background="@color/base_gray"
+        />
+
+    <ImageButton
+        android:id="@+id/imageButtonBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_round_arrow_back_24"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:backgroundTint="@color/base_red"
         />
 
     <LinearLayout
@@ -22,11 +37,12 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight=".5"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/base_red"
             >
             <TextView
+                android:id="@+id/textStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Positif Covid"
@@ -52,7 +68,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight=".5"
             android:orientation="vertical"
             android:background="@color/base_white"
@@ -78,6 +94,9 @@
                 android:paddingTop="5dp"
                 android:fontFamily="@font/lato_bold"
                 android:textColor="@color/black"
+                android:maxLength="20"
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 />
 
             <TextView

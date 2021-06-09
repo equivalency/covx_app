@@ -14,18 +14,16 @@ interface UserService {
      @POST("auth/login")
      fun loginUser(@Header("Authorization") authHeader: String, @Body loginRequest: LoginRequest): Call<LoginResponse>
 
-//     @POST("/upload")
-//     fun uploadFoto(
-//      @Header("Authorization") authHeader: String,
-//      @Body fotoDataRequest: FotoDataRequest
-//     ): Call<FotoDataResponse>
 
- @POST("/upload")
- fun uploadImage(
-  @Header("Authorization") authHeader: String,
-  @Body file: RequestBody,
- ): Call<ResponseBody>
+     @POST("/upload")
+     fun uploadImage(
+      @Header("Authorization") authHeader: String,
+      @Body file: RequestBody,
+     ): Call<ResponseBody>
 
      @GET("/data")
-     fun getFotoHasil(@Header("Authorization") authHeader: String, @Body id: Int): Call<ListFotoPrediksiResponse>
+     fun getFotoHasil(@Header("Authorization") authHeader: String): Call<PrediksiResponse>
+
+     @DELETE("/data/{filename}")
+     fun hapusDataPrediksi(@Header("Authorization") authHeader: String, @Path("filename") fileName: String): Call<ResponseBody>
 }
