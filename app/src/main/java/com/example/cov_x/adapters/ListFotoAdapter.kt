@@ -52,28 +52,29 @@ class ListFotoAdapter(val listFotoData: ArrayList<ListFotoPrediksiResponse>): Re
             builder1.setPositiveButton(
                     "Ya",
                     DialogInterface.OnClickListener { dialog, _ ->
-                        val pref = it.context.getSharedPreferences(LoginActivity.PREF_NAME, Context.MODE_PRIVATE)
-                        val request = ApiClient.buildService(UserService::class.java)
-                        val token = pref.getString(LoginActivity.KEY_TOKEN, "")
-                        val stringAuth = "Bearer " + token
-
-                        val call = fotoData.let { it1 -> request.hapusDataPrediksi(stringAuth, it1.filename) }
-
-                        call.enqueue(object : Callback<ResponseBody> {
-                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                if (response.isSuccessful) {
-                                    deleteItem(position)
-                                    Toast.makeText(it.context, response.body().toString(), Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(it.context, "Terjadi kesalahan sistem\n Silakan Coba Lagi", Toast.LENGTH_LONG).show()
-                                }
-                            }
-
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                Toast.makeText(it.context, "Terjadi kesalahan sistem: ${t.message}\nSilahkan Coba Lagi", Toast.LENGTH_LONG).show()
-                            }
-
-                        })
+//                        val pref = it.context.getSharedPreferences(LoginActivity.PREF_NAME, Context.MODE_PRIVATE)
+//                        val request = ApiClient.buildService(UserService::class.java)
+//                        val token = pref.getString(LoginActivity.KEY_TOKEN, "")
+//                        val stringAuth = "Bearer " + token
+//
+//                        val call = fotoData.let { it1 -> request.hapusDataPrediksi(stringAuth, it1.filename) }
+//
+//                        call.enqueue(object : Callback<ResponseBody> {
+//                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                                if (response.isSuccessful) {
+//                                    deleteItem(position)
+//                                    Toast.makeText(it.context, response.body().toString(), Toast.LENGTH_SHORT).show()
+//                                } else {
+//                                    Toast.makeText(it.context, "Terjadi kesalahan sistem\n Silakan Coba Lagi", Toast.LENGTH_LONG).show()
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                                Toast.makeText(it.context, "Terjadi kesalahan sistem: ${t.message}\nSilahkan Coba Lagi", Toast.LENGTH_LONG).show()
+//                            }
+//
+//                        })
+                        Toast.makeText(it.context, "Fitur ini belum ada. Hehe", Toast.LENGTH_LONG).show()
                         dialog.cancel()
                     })
 
